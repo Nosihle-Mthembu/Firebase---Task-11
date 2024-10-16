@@ -1,15 +1,23 @@
 import React, { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth"; // Import Firebase Auth methods
+import { auth } from "../../firebase-backend/configuration"; // Import the 'auth' from your firebase.js
 
 const SignUp = () => {
-  const [role, setRole] = useState("user");
+  // Initial state for form data
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     cellphone: "",
     address: "",
+    password: "",
   });
 
+  // States for error and success messages
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  // Handling input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -18,17 +26,28 @@ const SignUp = () => {
     });
   };
 
+  // Handle form submission (Sign Up logic)
   const handleSignUp = (e) => {
     e.preventDefault();
-    // Handle sign-up logic here with formData
-    console.log(formData);
+    const { email, password, firstName, lastName, cellphone, address } = formData;
+
+    // Firebase sign up using email and password
+    createUserWithEmailAndPassword(auth, email, password,firstName, lastName, cellphone, address)
+      .then((userCredential) => {
+        setSuccess("User created successfully!");
+        console.log("User created:", userCredential.user);
+        // Here, you can also store additional user data (firstName, lastName, etc.) in Firestore
+      })
+      .catch((error) => {
+        setError(error.message);
+        console.log("Error:", error);
+      });
   };
 
   return (
     <div style={styles.container}>
       <h2>Sign Up</h2>
       <form onSubmit={handleSignUp} style={styles.form}>
-        {/* First Name */}
         <input
           type="text"
           name="firstName"
@@ -38,7 +57,6 @@ const SignUp = () => {
           style={styles.input}
           required
         />
-        {/* Last Name */}
         <input
           type="text"
           name="lastName"
@@ -48,7 +66,6 @@ const SignUp = () => {
           style={styles.input}
           required
         />
-        {/* Email */}
         <input
           type="email"
           name="email"
@@ -58,7 +75,6 @@ const SignUp = () => {
           style={styles.input}
           required
         />
-        {/* Cellphone */}
         <input
           type="text"
           name="cellphone"
@@ -68,7 +84,6 @@ const SignUp = () => {
           style={styles.input}
           required
         />
-        {/* Address */}
         <input
           type="text"
           name="address"
@@ -78,19 +93,25 @@ const SignUp = () => {
           style={styles.input}
           required
         />
-        <select
-          style={styles.select}
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-        >
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select>
+        {/* Password */}
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleInputChange}
+          style={styles.input}
+          required
+        />
         {/* Submit Button */}
         <button type="submit" style={styles.button}>
           Sign Up
         </button>
       </form>
+
+      {/* Display error or success messages */}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      {success && <p style={{ color: "green" }}>{success}</p>}
     </div>
   );
 };
@@ -101,15 +122,7 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    marginTop: "100px",
-  },
-  select: {
-    margin: "10px 0",
-    padding: "10px",
-    fontSize: "16px",
-    width: "320px",
-    borderRadius: "5px",
-    border: "1px solid #ccc",
+    marginTop: "50px",
   },
   form: {
     display: "flex",

@@ -55,7 +55,7 @@ const styles = {
     color: "#fff",
     padding: "20px",
     textAlign: "center",
-    position: "absolute",
+    position: "relative",
     bottom: 0,
     width: "100%",
     backgroundColor: "#333",
