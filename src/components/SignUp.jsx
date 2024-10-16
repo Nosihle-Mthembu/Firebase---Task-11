@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth"; // Import Firebase Auth methods
-import { auth } from "../../firebase-backend/configuration"; // Import the 'auth' from your firebase.js
+import { useDispatch, useSelector } from "react-redux";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore"; // Firestore methods
+import { auth, db } from "../../firebase-backend/configuration"; // Firebase Auth and Firestore
+import { registerStart, registerSuccess, registerFail } from "../features/registerSlice"; // Import actions from your slice
 
 const SignUp = () => {
-  // Initial state for form data
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.register);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -11,13 +15,10 @@ const SignUp = () => {
     cellphone: "",
     address: "",
     password: "",
+    userType: "user", // Default user type
   });
+  const [success, setSuccess] = useState(""); // For success messages
 
-  // States for error and success messages
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-
-  // Handling input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -26,22 +27,31 @@ const SignUp = () => {
     });
   };
 
-  // Handle form submission (Sign Up logic)
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
-    const { email, password, firstName, lastName, cellphone, address } = formData;
+    const { email, password, firstName, lastName, cellphone, address, userType } = formData;
 
-    // Firebase sign up using email and password
-    createUserWithEmailAndPassword(auth, email, password,firstName, lastName, cellphone, address)
-      .then((userCredential) => {
-        setSuccess("User created successfully!");
-        console.log("User created:", userCredential.user);
-        // Here, you can also store additional user data (firstName, lastName, etc.) in Firestore
-      })
-      .catch((error) => {
-        setError(error.message);
-        console.log("Error:", error);
+    dispatch(registerStart());
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Store user data in Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        firstName,
+        lastName,
+        cellphone,
+        address,
+        email,
+        userType, // Store user type (admin/user)
       });
+
+      dispatch(registerSuccess(user));
+      setSuccess("User created successfully! Please sign in.");
+    } catch (error) {
+      dispatch(registerFail(error.message));
+    }
   };
 
   return (
@@ -93,7 +103,6 @@ const SignUp = () => {
           style={styles.input}
           required
         />
-        {/* Password */}
         <input
           type="password"
           name="password"
@@ -103,20 +112,28 @@ const SignUp = () => {
           style={styles.input}
           required
         />
-        {/* Submit Button */}
-        <button type="submit" style={styles.button}>
-          Sign Up
+        {/* Dropdown to select user type */}
+        <select
+          name="userType"
+          value={formData.userType}
+          onChange={handleInputChange}
+          style={styles.select}
+          required
+        >
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+        <button type="submit" style={styles.button} disabled={loading}>
+          {loading ? "Signing Up..." : "Sign Up"}
         </button>
       </form>
 
-      {/* Display error or success messages */}
       {error && <p style={{ color: "red" }}>{error}</p>}
       {success && <p style={{ color: "green" }}>{success}</p>}
     </div>
   );
 };
 
-// Styles object
 const styles = {
   container: {
     display: "flex",
@@ -138,6 +155,14 @@ const styles = {
     borderRadius: "5px",
     border: "1px solid #ccc",
   },
+  select: {
+    margin: "10px 0",
+    padding: "10px",
+    fontSize: "16px",
+    width: "300px",
+    borderRadius: "5px",
+    border: "1px solid #ccc",
+  },
   button: {
     padding: "10px 20px",
     backgroundColor: "#4CAF50",
@@ -145,7 +170,7 @@ const styles = {
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
-    marginTop: "20px",
+    marginTop: "10px",
   },
 };
 

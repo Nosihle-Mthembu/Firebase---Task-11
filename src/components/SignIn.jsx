@@ -1,33 +1,41 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../../firebase-backend/configuration";
+import { doc, getDoc } from "firebase/firestore";
 
 const SignIn = () => {
-  const [role, setRole] = useState("user"); // default role is 'user'
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
-    // Handle sign-in logic here based on email, password, and role
-    console.log("Role:", role);
-    console.log("Email:", email);
-    console.log("Password:", password);
+    try {
+      // Sign in with Firebase authentication
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Fetch user data from Firestore
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      const userData = userDoc.data();
+
+      // Navigate based on user role
+      if (userData.userType === "admin") {
+        navigate("/adminProfile"); // Admin dashboard
+      } else {
+        navigate("/userProfile"); // User dashboard
+      }
+    } catch (error) {
+      setError("Sign-in failed: " + error.message);
+    }
   };
 
   return (
     <div style={styles.container}>
       <h2>Sign In</h2>
       <form onSubmit={handleSignIn} style={styles.form}>
-        {/* Dropdown for selecting role */}
-        <select
-          style={styles.select}
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-        >
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select>
-
-        {/* Email input */}
         <input
           type="email"
           placeholder="Email"
@@ -36,8 +44,6 @@ const SignIn = () => {
           style={styles.input}
           required
         />
-
-        {/* Password input */}
         <input
           type="password"
           placeholder="Password"
@@ -46,17 +52,16 @@ const SignIn = () => {
           style={styles.input}
           required
         />
-
-        {/* Submit button */}
         <button type="submit" style={styles.button}>
           Sign In
         </button>
       </form>
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 };
 
-// Styles object
 const styles = {
   container: {
     display: "flex",
@@ -74,12 +79,6 @@ const styles = {
     padding: "10px",
     fontSize: "16px",
     width: "300px",
-  },
-  select: {
-    margin: "10px 0",
-    padding: "10px",
-    fontSize: "16px",
-    width: "320px",
     borderRadius: "5px",
     border: "1px solid #ccc",
   },
