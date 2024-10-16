@@ -126,7 +126,7 @@ const styles = {
   },
   map: {
     border: "0",
-    width: "100%",
+    width: "150%",
     height: "200px",
   },
   footerText: {

@@ -11,5 +11,10 @@ html,body,#root{
 }
 
 .coverPage{
-  background-image: url();
+  background-image: url(./assets/architecture-1477100_1280.jpg-copy.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  /* background-attachment: fixed; */
+  width: 100vw;
+  height: 65vh;
 }
