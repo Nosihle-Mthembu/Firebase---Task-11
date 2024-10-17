@@ -1,6 +1,10 @@
+// AddHotelForm.js
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addHotel } from '../features/hotelSlice'; // Adjust the import path as necessary
 
 const AddHotelForm = () => {
+ 
   const [hotelData, setHotelData] = useState({
     name: '',
     location: '',
@@ -13,6 +17,9 @@ const AddHotelForm = () => {
     entertainment: ''
   });
 
+  const [alertMessage, setAlertMessage] = useState(''); // State for handling the success alert
+  const dispatch = useDispatch();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setHotelData({
@@ -23,29 +30,45 @@ const AddHotelForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Hotel Data:', hotelData);
-    setHotelData({
-      name: '',
-      location: '',
-      description: '',
-      price: '',
-      imageUrl: '',
-      about: '',
-      policies: '',
-      facilities: '',
-      entertainment: ''
-    });
-  };
+
+    // Dispatch the action to add the hotel to the Redux store
+    dispatch(addHotel(hotelData));
+
+    // Show a success message in the alert
+    setAlertMessage('Hotel added successfully!');
+
+    // Log the added hotel data to the console for verification
+    console.log('Hotel added:', hotelData);
+
+        // Reset the form fields after submission
+        setHotelData({
+            name: '',
+            location: '',
+            description: '',
+            price: '',
+            imageUrl: '',
+            about: '',
+            policies: '',
+            facilities: '',
+            entertainment: '',
+          });
+      
+          // Clear the alert message after 3 seconds
+          setTimeout(() => {
+            setAlertMessage('');
+          }, 3000);
+        };
 
   return (
     <div style={styles.container}>
       <h2 style={styles.title}>Add New Hotel</h2>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        {/* First column */}
+      {/* First column */}
+        {alertMessage && <div style={styles.alertStyle}>{alertMessage}</div>}
+        <form onSubmit={handleSubmit} style={styles.form}>
         <div style={styles.column}>
-          <div style={styles.formGroup}>
-            <label htmlFor="name">Hotel Name</label>
-            <input
+           <div style={styles.formGroup}>
+             <label htmlFor="name">Hotel Name</label>
+             <input
               type="text"
               id="name"
               name="name"
@@ -181,6 +204,14 @@ const styles = {
     marginBottom: '20px',
     color: '#333',
   },
+alertStyle: {
+    textAlign: 'center',
+    marginBottom: '10px',
+    padding: '10px',
+    backgroundColor: '#d4edda',
+    color: '#155724',
+    borderRadius: '5px',
+  },
   form: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -223,4 +254,6 @@ const styles = {
   },
 };
 
+
 export default AddHotelForm;
+

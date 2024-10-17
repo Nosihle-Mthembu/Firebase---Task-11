@@ -1,6 +1,10 @@
+// AdminPage.js
 import React from 'react';
+import { useSelector } from 'react-redux'; // Import useSelector to access Redux state
 
 const AdminPage = () => {
+  const hotels = useSelector((state) => state.hotels.list); // Get the list of hotels from the Redux store
+
   return (
     <div style={styles.container}>
       <div style={styles.sidebar}>
@@ -19,13 +23,12 @@ const AdminPage = () => {
           <button style={styles.logoutButton}>Logout</button>
         </div>
         <div style={styles.accommodationCards}>
-          {/* Accommodation Card Examples */}
-          {Array.from({ length: 3 }).map((_, index) => (
+          {hotels.map((hotel, index) => ( // Map through the hotels to display them
             <div key={index} style={styles.accommodationCard}>
-              <img src="accommodation-image-url" alt="Accommodation" style={styles.accommodationImage} />
-              <h3>Accommodation Title {index + 1}</h3>
-              <p>Location: City, Country</p>
-              <p>Price: $100/night</p>
+              <img src={hotel.imageUrl} alt={hotel.name} style={styles.accommodationImage} />
+              <h3>{hotel.name}</h3>
+              <p>Location: {hotel.location}</p>
+              <p>Price: ${hotel.price}/night</p>
               <button style={styles.viewButton}>View Details</button>
             </div>
           ))}

@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import registerReducer from '../features/registerSlice'; // Adjust the import path as necessary
+import registerReducer from '../features/registerSlice';
+import hotelReducer from '../features/hotelSlice'; 
 
 export const store = configureStore({
   reducer: {
-    register: registerReducer, // Add your register slice reducer here
+    register: registerReducer,
+    hotels: hotelReducer,
   },
 });
-
-
