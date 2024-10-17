@@ -43,7 +43,7 @@ const NavBar = () => {
           </Link>
         </li>
         <li style={styles.navItem}>
-          <Link to="/Accommodation" style={styles.linkStyle}>
+          <Link to="/accommodations" style={styles.linkStyle}>
             Accommodation
           </Link>
         </li>

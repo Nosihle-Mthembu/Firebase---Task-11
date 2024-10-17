@@ -6,8 +6,9 @@ import NoPage from "./components/NoPage";
 import Accommodations from "./components/Accomodation";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
-import Admin from "./components/AdminProfile";
+import AdminPage from "./components/AdminProfile";
 import User from "./components/UserProfile";
+import AddHotelForm from "./components/hotelAddition";
 
 export default function App() {
 
@@ -21,8 +22,9 @@ export default function App() {
           <Route path="sign-up" element={<SignUp />} />
           <Route path="contact" element={<Contact />} />
           <Route path="*" element={<NoPage />} />
-          <Route path="adminProfile" element={<Admin />} />
+          <Route path="adminProfile" element={<AdminPage />} />
           <Route path="userProfile" element={<User />} />
+          <Route path="Form" element={<AddHotelForm />} />
         </Route>
       </Routes>
     </BrowserRouter>

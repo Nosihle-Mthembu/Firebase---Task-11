@@ -18,3 +18,18 @@ html,body,#root{
   width: 100vw;
   height: 65vh;
 }
+
+body {
+  font-family: 'Arial', sans-serif;
+}
+.slider {
+  display: flex;
+  white-space: nowrap;
+  transition: transform 0.5s linear;
+}
+.slider-item {
+  display: inline-block;
+  width: 16rem; /* 64 * 4 */
+  height: 20rem; /* 80 * 4 */
+  margin: 0 0.5rem;
+}
