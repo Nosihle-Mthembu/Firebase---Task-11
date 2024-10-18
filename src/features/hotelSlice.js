@@ -33,34 +33,32 @@ const hotelSlice = createSlice({
   name: 'hotels',
   initialState,
   reducers: {
+    addHotel: (state, action) => {
+      state.list.push(action.payload);
+      saveHotelsToLocalStorage(state.list); // Save updated list to local storage
+    },
+
+    deleteHotel: (state, action) => {
+      state.list = state.list.filter((hotel) => hotel.id !== action.payload);
+      saveHotelsToLocalStorage(state.list); // Save updated list to local storage
+    },
+
+    // Updated updateHotel reducer
     updateHotel: (state, action) => {
-      const { id, name, location, price, imageUrl } = action.payload;
-      const index = state.list.findIndex(hotel => hotel.id === id);
-      if (index !== -1) {
-        state.list[index] = { id, name, location, price, imageUrl };
+      const { id, updatedData } = action.payload; // Receive ID and updated hotel data
+      const hotelIndex = state.list.findIndex((hotel) => hotel.id === id);
+      if (hotelIndex !== -1) {
+        // Update the hotel at the found index with the new data
+        state.list[hotelIndex] = { ...state.list[hotelIndex], ...updatedData };
+        saveHotelsToLocalStorage(state.list); // Save updated list to local storage
       }
     },
 
-    addHotel: (state, action) => {
-      state.list.push(action.payload);
-      saveHotelsToLocalStorage(state.list);
-    },
-    deleteHotel: (state, action) => {
-      state.list = state.list.filter((hotel) => hotel.id !== action.payload);
-      saveHotelsToLocalStorage(state.list);
-    },
-    updateHotel: (state, action) => {
-      const { id, updatedData } = action.payload;
-      const hotelIndex = state.list.findIndex((hotel) => hotel.id === id);
-      if (hotelIndex !== -1) {
-        state.list[hotelIndex] = { ...state.list[hotelIndex], ...updatedData };
-        saveHotelsToLocalStorage(state.list);
-      }
-    },
     setAdminProfile: (state, action) => {
       state.admin = { ...state.admin, ...action.payload };
       saveAdminToLocalStorage(state.admin); // Save admin details to local storage
     },
+
     deleteAdminProfile: (state) => {
       state.admin = {
         name: '',
@@ -75,4 +73,3 @@ const hotelSlice = createSlice({
 
 export const { addHotel, deleteHotel, updateHotel, setAdminProfile, deleteAdminProfile } = hotelSlice.actions;
 export default hotelSlice.reducer;
-

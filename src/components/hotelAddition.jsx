@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { addHotel } from '../features/hotelSlice'; // Adjust the import path as necessary
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
-const AddHotelForm = () => {
+const AddHotelForm = ({ hotelToEdit }) => {
   const [hotelData, setHotelData] = useState({
     name: '',
     location: '',
@@ -31,14 +31,24 @@ const AddHotelForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (hotelToEdit) {
+      // If editing, dispatch the updateHotel action
+      dispatch(updateHotel(hotelData));
+    } else {
+      // If adding a new hotel, dispatch the addHotel action
+      dispatch(addHotel(hotelData));
+      setAlertMessage('Hotel added successfully!');
+      console.log('Hotel added:', hotelData);
+    }
+    navigate('/adminProfile');
     // Dispatch the action to add the hotel to the Redux store
-    dispatch(addHotel(hotelData));
+    // dispatch(addHotel(hotelData));
 
     // Show a success message in the alert
-    setAlertMessage('Hotel added successfully!');
+    
 
     // Log the added hotel data to the console for verification
-    console.log('Hotel added:', hotelData);
+    
 
     // Reset the form fields after submission
     setHotelData({
@@ -53,6 +63,14 @@ const AddHotelForm = () => {
       entertainment: '',
     });
 
+
+  useEffect(() => {
+    // If there's hotel data passed as props, populate the form with it (for editing)
+    if (hotelToEdit) {
+      setHotelData(hotelToEdit);
+    }
+  }, [hotelToEdit]);
+
     // Clear the alert message after 3 seconds and navigate to the AdminProfile
     setTimeout(() => {
       setAlertMessage('');
@@ -62,7 +80,7 @@ const AddHotelForm = () => {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.title}>Add New Hotel</h2>
+      <h2 style={styles.title}>{hotelToEdit ? 'Edit Hotel' : 'Add New Hotel'}</h2>
       {/* First column */}
       {alertMessage && <div style={styles.alertStyle}>{alertMessage}</div>}
       <form onSubmit={handleSubmit} style={styles.form}>
@@ -183,7 +201,7 @@ const AddHotelForm = () => {
         </div>
 
         <div style={styles.fullWidth}>
-          <button type="submit" style={styles.button}>Add Hotel</button>
+          <button type="submit" style={styles.button}>{hotelToEdit ? 'Update Hotel' : 'Add Hotel'}</button>
         </div>
       </form>
     </div>

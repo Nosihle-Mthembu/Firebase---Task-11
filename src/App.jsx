@@ -11,6 +11,7 @@ import User from "./components/UserProfile";
 import AddHotelForm from "./components/hotelAddition";
 import AccommodationView from "./components/accomodationView";
 import UpdateHotelForm from './components/UpdateHotelForm';
+// import HotelForm from "./components/HotelForm";
 
 export default function App() {
 
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/Form/:hotelId" element={<AddHotelForm />} />
           <Route path="accommodationView" element={<AccommodationView />} />
           <Route path="/update-hotel/:hotelId" element={<UpdateHotelForm />} />
+          {/* <Route path="hotelform/:hotelId" element={<HotelForm />} /> */}
         </Route>
       </Routes>
     </BrowserRouter>
