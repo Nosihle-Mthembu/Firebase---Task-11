@@ -9,6 +9,7 @@ import SignUp from "./components/SignUp";
 import AdminPage from "./components/AdminProfile";
 import User from "./components/UserProfile";
 import AddHotelForm from "./components/hotelAddition";
+import AccommodationView from "./components/accomodationView";
 
 export default function App() {
 
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="adminProfile" element={<AdminPage />} />
           <Route path="userProfile" element={<User />} />
           <Route path="Form" element={<AddHotelForm />} />
+          <Route path="accommodationView" element={<AccommodationView />} />
         </Route>
       </Routes>
     </BrowserRouter>

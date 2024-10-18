@@ -1,10 +1,9 @@
-// AddHotelForm.js
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addHotel } from '../features/hotelSlice'; // Adjust the import path as necessary
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const AddHotelForm = () => {
- 
   const [hotelData, setHotelData] = useState({
     name: '',
     location: '',
@@ -19,6 +18,7 @@ const AddHotelForm = () => {
 
   const [alertMessage, setAlertMessage] = useState(''); // State for handling the success alert
   const dispatch = useDispatch();
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,35 +40,36 @@ const AddHotelForm = () => {
     // Log the added hotel data to the console for verification
     console.log('Hotel added:', hotelData);
 
-        // Reset the form fields after submission
-        setHotelData({
-            name: '',
-            location: '',
-            description: '',
-            price: '',
-            imageUrl: '',
-            about: '',
-            policies: '',
-            facilities: '',
-            entertainment: '',
-          });
-      
-          // Clear the alert message after 3 seconds
-          setTimeout(() => {
-            setAlertMessage('');
-          }, 3000);
-        };
+    // Reset the form fields after submission
+    setHotelData({
+      name: '',
+      location: '',
+      description: '',
+      price: '',
+      imageUrl: '',
+      about: '',
+      policies: '',
+      facilities: '',
+      entertainment: '',
+    });
+
+    // Clear the alert message after 3 seconds and navigate to the AdminProfile
+    setTimeout(() => {
+      setAlertMessage('');
+      navigate('/adminProfile'); // Navigate to the AdminProfile page after 3 seconds
+    }, 3000); // You can adjust the timeout duration as needed
+  };
 
   return (
     <div style={styles.container}>
       <h2 style={styles.title}>Add New Hotel</h2>
       {/* First column */}
-        {alertMessage && <div style={styles.alertStyle}>{alertMessage}</div>}
-        <form onSubmit={handleSubmit} style={styles.form}>
+      {alertMessage && <div style={styles.alertStyle}>{alertMessage}</div>}
+      <form onSubmit={handleSubmit} style={styles.form}>
         <div style={styles.column}>
-           <div style={styles.formGroup}>
-             <label htmlFor="name">Hotel Name</label>
-             <input
+          <div style={styles.formGroup}>
+            <label htmlFor="name">Hotel Name</label>
+            <input
               type="text"
               id="name"
               name="name"
@@ -204,7 +205,7 @@ const styles = {
     marginBottom: '20px',
     color: '#333',
   },
-alertStyle: {
+  alertStyle: {
     textAlign: 'center',
     marginBottom: '10px',
     padding: '10px',
@@ -254,6 +255,4 @@ alertStyle: {
   },
 };
 
-
 export default AddHotelForm;
-

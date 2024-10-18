@@ -1,15 +1,40 @@
-// AdminPage.js
 import React from 'react';
-import { useSelector } from 'react-redux'; // Import useSelector to access Redux state
+import { useSelector, useDispatch } from 'react-redux'; // Add useDispatch to dispatch actions
+import { useNavigate } from 'react-router-dom';
+import AddHotelIcon from './FormIcon';
+import { deleteHotel } from '../features/hotelSlice';
 
 const AdminPage = () => {
-  const hotels = useSelector((state) => state.hotels.list); // Get the list of hotels from the Redux store
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
+  // Get the list of hotels and admin info from the Redux store
+  const hotels = useSelector((state) => state.hotels.list);
+  
+  // Logout handler
+  const handleLogout = () => {
+    if (window.confirm('Are you sure you want to logout?')) {
+      navigate('/');
+    }
+  };  
+
+  const handleEdit = () => {
+    navigate('/Form');
+  };
+
+  const handleAccommodationView = () => {
+    navigate('/accommodationView');
+  };
+
+  // Delete hotel handler
+  const handleDeleteHotel = (hotelId) => {
+    dispatch(deleteHotel(hotelId));
+  };
 
   return (
     <div style={styles.container}>
       <div style={styles.sidebar}>
         <h2 style={styles.sidebarTitle}>Admin Profile</h2>
-        {/* Admin Profile Details */}
         <div style={styles.profileCard}>
           <img src="admin-avatar-url" alt="Admin Avatar" style={styles.avatar} />
           <h3>Admin Name</h3>
@@ -20,32 +45,47 @@ const AdminPage = () => {
       <div style={styles.content}>
         <div style={styles.header}>
           <h2 style={styles.headerTitle}>Accommodation Listings</h2>
-          <button style={styles.logoutButton}>Logout</button>
+          <button style={styles.logoutButton} onClick={handleLogout}>Logout</button>
         </div>
         <div style={styles.accommodationCards}>
-          {hotels.map((hotel, index) => ( // Map through the hotels to display them
-            <div key={index} style={styles.accommodationCard}>
-              <img src={hotel.imageUrl} alt={hotel.name} style={styles.accommodationImage} />
-              <h3>{hotel.name}</h3>
-              <p>Location: {hotel.location}</p>
-              <p>Price: ${hotel.price}/night</p>
-              <button style={styles.viewButton}>View Details</button>
-            </div>
-          ))}
+          {hotels.length === 0 ? (
+            <p>No accommodations listed yet.</p>
+          ) : (
+            hotels.map((hotel) => (
+              <div key={hotel.id} style={styles.accommodationCard}>
+                <img src={hotel.imageUrl} alt={hotel.name} style={styles.accommodationImage} onClick={handleAccommodationView}/>
+                <h3>{hotel.name}</h3>
+                <p>Location: {hotel.location}</p>
+                <p>Price: R{hotel.price}/night</p>
+
+                {/* Edit/Delete functionality */}
+                <div style={styles.actions}>
+                    <button onClick={handleEdit} style={styles.editButton}>Edit</button>
+                  <button
+                    style={styles.deleteButton}
+                    onClick={() => handleDeleteHotel(hotel.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
+      <AddHotelIcon />
     </div>
   );
 };
 
-// Inline CSS styles
+// Inline CSS styles (existing styles)
 const styles = {
   container: {
     display: 'flex',
     height: '100vh',
   },
   sidebar: {
-    flex: '0 0 25%', // Sidebar takes 25% of the width
+    flex: '0 0 25%',
     backgroundColor: '#f2f2f2',
     padding: '20px',
     borderRight: '1px solid #ccc',
@@ -68,7 +108,7 @@ const styles = {
     marginBottom: '10px',
   },
   content: {
-    flex: '0 0 75%', // Content takes 75% of the width
+    flex: '0 0 75%',
     padding: '20px',
     position: 'relative',
   },
@@ -108,10 +148,22 @@ const styles = {
     objectFit: 'cover',
     borderRadius: '5px',
   },
-  viewButton: {
+  actions: {
     marginTop: '10px',
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  editButton: {
     padding: '8px 12px',
-    backgroundColor: '#28a745',
+    backgroundColor: '#007bff',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+  },
+  deleteButton: {
+    padding: '8px 12px',
+    backgroundColor: '#dc3545',
     color: '#fff',
     border: 'none',
     borderRadius: '5px',
