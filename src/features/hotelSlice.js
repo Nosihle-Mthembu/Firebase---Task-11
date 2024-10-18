@@ -33,6 +33,14 @@ const hotelSlice = createSlice({
   name: 'hotels',
   initialState,
   reducers: {
+    updateHotel: (state, action) => {
+      const { id, name, location, price, imageUrl } = action.payload;
+      const index = state.list.findIndex(hotel => hotel.id === id);
+      if (index !== -1) {
+        state.list[index] = { id, name, location, price, imageUrl };
+      }
+    },
+
     addHotel: (state, action) => {
       state.list.push(action.payload);
       saveHotelsToLocalStorage(state.list);

@@ -8,7 +8,7 @@ const AdminPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  // Get the list of hotels and admin info from the Redux store
+  // Get the list of hotels from the Redux store
   const hotels = useSelector((state) => state.hotels.list);
   
   // Logout handler
@@ -18,8 +18,9 @@ const AdminPage = () => {
     }
   };  
 
-  const handleEdit = () => {
-    navigate('/Form');
+  const handleEdit = (hotelId) => {
+    // Navigate to the edit form for the selected hotel
+    navigate(`/update-hotel/${hotelId}`);
   };
 
   const handleAccommodationView = () => {
@@ -40,6 +41,7 @@ const AdminPage = () => {
           <h3>Admin Name</h3>
           <p>Email: admin@example.com</p>
           <p>Role: Administrator</p>
+          <button style={styles.updateButton}>Update Profile</button>
         </div>
       </div>
       <div style={styles.content}>
@@ -48,19 +50,24 @@ const AdminPage = () => {
           <button style={styles.logoutButton} onClick={handleLogout}>Logout</button>
         </div>
         <div style={styles.accommodationCards}>
-          {hotels.length === 0 ? (
+        {hotels.length === 0 ? (
             <p>No accommodations listed yet.</p>
           ) : (
             hotels.map((hotel) => (
-              <div key={hotel.id} style={styles.accommodationCard}>
-                <img src={hotel.imageUrl} alt={hotel.name} style={styles.accommodationImage} onClick={handleAccommodationView}/>
+                <div key={`${hotel.id}-${hotel.name}`} style={styles.accommodationCard}>
+                <img
+                  src={hotel.imageUrl}
+                  alt={hotel.name}
+                  style={styles.accommodationImage}
+                  onClick={handleAccommodationView}
+                />
                 <h3>{hotel.name}</h3>
                 <p>Location: {hotel.location}</p>
                 <p>Price: R{hotel.price}/night</p>
 
                 {/* Edit/Delete functionality */}
                 <div style={styles.actions}>
-                    <button onClick={handleEdit} style={styles.editButton}>Edit</button>
+                  <button onClick={handleEdit} style={styles.editButton}>Edit</button>
                   <button
                     style={styles.deleteButton}
                     onClick={() => handleDeleteHotel(hotel.id)}
@@ -168,6 +175,15 @@ const styles = {
     border: 'none',
     borderRadius: '5px',
     cursor: 'pointer',
+  },
+  updateButton: {
+    padding: '8px 12px',
+    backgroundColor: '#28a745',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    marginTop: '10px',
   },
 };
 
