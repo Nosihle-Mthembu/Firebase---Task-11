@@ -1,22 +1,19 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux'; // Add useDispatch to dispatch actions
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import AddHotelIcon from './FormIcon';
 import { deleteHotel } from '../features/hotelSlice';
+import { IoAddCircleOutline } from "react-icons/io5";
 
 const AdminPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
-  // Get the list of hotels from the Redux store
+
   const hotels = useSelector((state) => state.hotels.list);
-  
-  // Logout handler
+
   const handleLogout = () => {
     if (window.confirm('Are you sure you want to logout?')) {
       navigate('/');
     }
-  };  
+  };
 
   const handleEdit = (hotelId) => {
     // Navigate to the edit form for the selected hotel
@@ -27,9 +24,12 @@ const AdminPage = () => {
     navigate('/accommodationView');
   };
 
-  // Delete hotel handler
   const handleDeleteHotel = (hotelId) => {
     dispatch(deleteHotel(hotelId));
+  };
+
+  const handleHotelForm = () => {
+    navigate('/Form/:hotelId'); 
   };
 
   return (
@@ -48,13 +48,14 @@ const AdminPage = () => {
         <div style={styles.header}>
           <h2 style={styles.headerTitle}>Accommodation Listings</h2>
           <button style={styles.logoutButton} onClick={handleLogout}>Logout</button>
+          
         </div>
         <div style={styles.accommodationCards}>
-        {hotels.length === 0 ? (
+          {hotels.length === 0 ? (
             <p>No accommodations listed yet.</p>
           ) : (
             hotels.map((hotel) => (
-                <div key={`${hotel.id}-${hotel.name}`} style={styles.accommodationCard}>
+              <div key={`${hotel.id}-${hotel.name}`} style={styles.accommodationCard}>
                 <img
                   src={hotel.imageUrl}
                   alt={hotel.name}
@@ -67,7 +68,7 @@ const AdminPage = () => {
 
                 {/* Edit/Delete functionality */}
                 <div style={styles.actions}>
-                  <button onClick={handleEdit} style={styles.editButton}>Edit</button>
+                  <button onClick={() => handleEdit(hotel.id)} style={styles.editButton}>Edit</button>
                   <button
                     style={styles.deleteButton}
                     onClick={() => handleDeleteHotel(hotel.id)}
@@ -79,8 +80,11 @@ const AdminPage = () => {
             ))
           )}
         </div>
+
+          <IoAddCircleOutline style={{ cursor: 'pointer', fontSize: '24px', position: 'absolute', bottom: '50px', right: '50px', width:"10%", height:"10%" }}
+          onClick={handleHotelForm}/>
+        
       </div>
-      <AddHotelIcon />
     </div>
   );
 };

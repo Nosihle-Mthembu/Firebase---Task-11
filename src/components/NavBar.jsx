@@ -70,6 +70,7 @@ const NavBar = () => {
 // Inline styles
 const styles = {
   nav: {
+    fontSize:"120%",
     backgroundColor: "#333",
     position: "relative",
     width: "100%", // Full width

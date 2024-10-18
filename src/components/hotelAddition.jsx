@@ -106,7 +106,7 @@ const AddHotelForm = () => {
           </div>
 
           <div style={styles.formGroup}>
-            <label htmlFor="price">Price per Night ($)</label>
+            <label htmlFor="price">Price per Night (R)</label>
             <input
               type="number"
               id="price"
