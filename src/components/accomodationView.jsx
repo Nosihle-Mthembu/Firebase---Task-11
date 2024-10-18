@@ -1,8 +1,8 @@
-function AccommodationView(){
+// function AccommodationView(){
 
-    return(
-        <div className="accommodation-view">AccomodationView</div>
-    )
-}
+//     return(
+//         <div className="accommodation-view">AccomodationView</div>
+//     )
+// }
 
-export default AccommodationView;
+// export default AccommodationView;
