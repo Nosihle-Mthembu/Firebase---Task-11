@@ -1,4 +1,3 @@
-// registerSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -28,6 +27,5 @@ export const registerSlice = createSlice({
 
 // Export actions for dispatch
 export const { registerStart, registerSuccess, registerFail } = registerSlice.actions;
-
 // Export the reducer to include in the store
 export default registerSlice.reducer;

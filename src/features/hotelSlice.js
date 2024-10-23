@@ -45,12 +45,9 @@ const hotelSlice = createSlice({
 
     // Updated updateHotel reducer
     updateHotel: (state, action) => {
-      const { id, updatedData } = action.payload; // Receive ID and updated hotel data
-      const hotelIndex = state.list.findIndex((hotel) => hotel.id === id);
-      if (hotelIndex !== -1) {
-        // Update the hotel at the found index with the new data
-        state.list[hotelIndex] = { ...state.list[hotelIndex], ...updatedData };
-        saveHotelsToLocalStorage(state.list); // Save updated list to local storage
+      const index = state.list.findIndex((hotel) => hotel.id === action.payload.id);
+      if (index !== -1) {
+        state.list[index] = { ...state.list[index], ...action.payload };
       }
     },
 

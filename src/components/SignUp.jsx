@@ -51,6 +51,7 @@ const SignUp = () => {
       setSuccess("User created successfully! Please sign in.");
     } catch (error) {
       dispatch(registerFail(error.message));
+      console.error("Error during sign-up:", error);
     }
   };
 

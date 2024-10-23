@@ -1,4 +1,6 @@
+import PayButton from "./checkoutForm";
 
+        
         function AccommodationView() {
             const containerStyle = {
                 padding: '1.5rem',
@@ -110,6 +112,7 @@
                     </div>
                 <div className="p-6 max-w-2xl mx-auto">
                     <h1 className="text-2xl font-bold">Entire home in Ballito, South Africa</h1>
+                    <h2>R2000</h2>
                     <p className="text-gray-700">10 guests · 5 bedrooms · 6 beds · 4.5 baths</p>
                     <div className="flex items-center mt-2">
                         <i className="fas fa-star text-black"></i>
@@ -150,41 +153,41 @@
                     </p>
                 </div>
                 
-                    <section class="mb-8">
-                        <h2 class="text-xl font-bold mb-4">Facilities</h2>
-                        <div class="grid grid-cols-2 gap-4 mb-4">
-                            <div class="flex items-center">
-                                <i class="fas fa-utensils mr-2"></i> Kitchen
+                    <section className="mb-8">
+                        <h2 className="text-xl font-bold mb-4">Facilities</h2>
+                        <div className="grid grid-cols-2 gap-4 mb-4">
+                            <div className="flex items-center">
+                                <i className="fas fa-utensils mr-2"></i> Kitchen
                             </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-parking mr-2"></i> Free parking on premises
+                            <div className="flex items-center">
+                                <i className="fas fa-parking mr-2"></i> Free parking on premises
                             </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-paw mr-2"></i> Pets allowed
+                            <div className="flex items-center">
+                                <i className="fas fa-paw mr-2"></i> Pets allowed
                             </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-wifi mr-2"></i> Wifi
+                            <div className="flex items-center">
+                                <i className="fas fa-wifi mr-2"></i> Wifi
                             </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-swimmer mr-2"></i> Pool
+                            <div className="flex items-center">
+                                <i className="fas fa-swimmer mr-2"></i> Pool
                             </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-tv mr-2"></i> TV
+                            <div className="flex items-center">
+                                <i className="fas fa-tv mr-2"></i> TV
                             </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-water mr-2"></i> Washer
+                            <div className="flex items-center">
+                                <i className="fas fa-water mr-2"></i> Washer
                             </div>
-                            <div class="flex items-center">
-                                <i class="fas fa-dryer mr-2"></i> Dryer - In unit
+                            <div className="flex items-center">
+                                <i className="fas fa-dryer mr-2"></i> Dryer - In unit
                             </div>
                         </div>
-                        <button class="border border-gray-400 py-2 px-4 rounded">Show all amenities</button>
+                        <button className="border border-gray-400 py-2 px-4 rounded">Show all amenities</button>
                     </section>
                   
                 
 
                     <div className="p-6">
-                    <h2 class="text-xl font-bold mb-4">Policies</h2>
+                    <h2 className="text-xl font-bold mb-4">Policies</h2>
                     <div className="mb-4">
                         <div className="flex items-center mb-2">
                             <i className="fas fa-sign-in-alt mr-2"></i>
@@ -313,31 +316,32 @@
                         <i className="fas fa-calendar-alt text-gray-500"></i>
                         <a href="#" className="text-gray-500">Clear dates</a>
                     </div>
+                    <PayButton />
                 </div>
 
-                    <hr class="my-8"/>
-                    <section class="mb-8">
-                        <h2 class="text-xl font-bold mb-4">1 review</h2>
-                        <p class="mb-4">Among other things, all appear after 2 reviews</p>
-                        <div class="flex items-start mb-4">
+                    <hr className="my-8"/>
+                    <section className="mb-8">
+                        <h2 className="text-xl font-bold mb-4">1 review</h2>
+                        <p className="mb-4">Among other things, all appear after 2 reviews</p>
+                        <div className="flex items-start mb-4">
                             <img src="https://placehold.co/50x50" alt="Profile picture of reviewer" class="rounded-full mr-4"/>
                             <div>
-                                <p class="font-bold">Vladislav</p>
-                                <p class="text-sm text-gray-600">Johannesburg, South Africa</p>
-                                <p class="text-sm text-gray-600">1 review</p>
-                                <p class="text-sm text-gray-600">October 2021</p>
-                                <p class="mt-2">Beautiful, spacious, clean, top kids, this is the perfect house! We got in touch with the host daily and we couldn't have chosen a better house! We loved our stay!...</p>
-                                <button class="text-blue-500">Show more</button>
+                                <p className="font-bold">Vladislav</p>
+                                <p className="text-sm text-gray-600">Johannesburg, South Africa</p>
+                                <p className="text-sm text-gray-600">1 review</p>
+                                <p className="text-sm text-gray-600">October 2021</p>
+                                <p className="mt-2">Beautiful, spacious, clean, top kids, this is the perfect house! We got in touch with the host daily and we couldn't have chosen a better house! We loved our stay!...</p>
+                                <button className="text-blue-500">Show more</button>
                             </div>
                         </div>
                     </section>
-                    <hr class="my-8"/>
-                    <section class="mb-8">
-                        <h2 class="text-xl font-bold mb-4">Where you'll be</h2>
+                    <hr className="my-8"/>
+                    <section className="mb-8">
+                        <h2 className="text-xl font-bold mb-4">Where you'll be</h2>
                         <img src="https://placehold.co/600x300" alt="Map showing the location of the property" class="w-full mb-4"/>
-                        <p class="font-bold">Ballito, KwaZulu-Natal, South Africa</p>
+                        <p className="font-bold">Ballito, KwaZulu-Natal, South Africa</p>
                         <p>Welcome to Ballito, a vibrant seaside town brimming with excitement and family-friendly fun. Nestled along the stunning Dolphin Coast, this area boasts pristine beaches, lush greenery, and a variety of activities for all ages. Whether you're looking to relax on the beach, explore local markets, or enjoy water sports, Ballito has something for everyone.</p>
-                        <button class="text-blue-500">Show more</button>
+                        <button className="text-blue-500">Show more</button>
                     </section>
                 </div>
             );
