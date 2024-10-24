@@ -1,7 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { addHotel, updateHotel } from '../features/hotelSlice'; // Adjust the import path as necessary
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { addHotel, updateHotel } from '../features/hotelSlice';
+import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faWifi,
+    faUtensils,
+    faCar,
+    faDog,
+    faSwimmingPool,
+    faDumbbell,
+    faSpa,
+    faMusic,
+    faChild,
+    faTicketAlt,
+} from '@fortawesome/free-solid-svg-icons';
 
 const AddHotelForm = ({ hotelToEdit }) => {
     const [hotelData, setHotelData] = useState({
@@ -9,18 +22,32 @@ const AddHotelForm = ({ hotelToEdit }) => {
         location: '',
         description: '',
         price: '',
-        imageUrl: '',
+        imageUrl: [],
         about: '',
-        policies: '',
-        facilities: '',
-        entertainment: ''
+        policies: {
+            wifi: false,
+            breakfast: false,
+            parking: false,
+            petFriendly: false,
+        },
+        facilities: {
+            pool: false,
+            gym: false,
+            spa: false,
+            restaurant: false,
+        },
+        entertainment: {
+            liveMusic: false,
+            kidsClub: false,
+            bar: false,
+            tours: false,
+        }
     });
-    const [alertMessage, setAlertMessage] = useState(''); // State for handling the success alert
+    const [alertMessage, setAlertMessage] = useState('');
     const dispatch = useDispatch();
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // If there's hotel data passed as props, populate the form with it (for editing)
         if (hotelToEdit) {
             setHotelData(hotelToEdit);
         }
@@ -34,40 +61,75 @@ const AddHotelForm = ({ hotelToEdit }) => {
         });
     };
 
+    const handleImageChange = (e) => {
+        const files = Array.from(e.target.files);
+        const imageUrls = files.map(file => URL.createObjectURL(file));
+        setHotelData({
+            ...hotelData,
+            imageUrl: imageUrls
+        });
+    };
+
+    const handleCheckboxChange = (category, item) => {
+        setHotelData(prevState => ({
+            ...prevState,
+            [category]: {
+                ...prevState[category],
+                [item]: !prevState[category][item]
+            }
+        }));
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (hotelData.imageUrl.length < 5) {
+            setAlertMessage('Please upload at least 5 images.');
+            return;
+        }
+
         if (hotelToEdit) {
-            // If editing, dispatch the updateHotel action
             dispatch(updateHotel(hotelData));
         } else {
-            // If adding a new hotel, dispatch the addHotel action
             dispatch(addHotel(hotelData));
             setAlertMessage('Hotel added successfully!');
-            console.log('Hotel added:', hotelData);
         }
-        // Reset the form fields after submission
+
         setHotelData({
             name: '',
             location: '',
             description: '',
             price: '',
-            imageUrl: '',
+            imageUrl: [],
             about: '',
-            policies: '',
-            facilities: '',
-            entertainment: ''
+            policies: {
+                wifi: false,
+                breakfast: false,
+                parking: false,
+                petFriendly: false,
+            },
+            facilities: {
+                pool: false,
+                gym: false,
+                spa: false,
+                restaurant: false,
+            },
+            entertainment: {
+                liveMusic: false,
+                kidsClub: false,
+                bar: false,
+                tours: false,
+            }
         });
 
         setTimeout(() => {
             setAlertMessage('');
-            navigate('/adminProfile'); // Navigate to the AdminProfile page after 3 seconds
-        }, 3000); // You can adjust the timeout duration as needed
+            navigate('/adminProfile');
+        }, 3000);
     };
 
     return (
         <div style={styles.container}>
             <h2 style={styles.title}>{hotelToEdit ? 'Edit Hotel' : 'Add New Hotel'}</h2>
-            {/* First column */}
             {alertMessage && <div style={styles.alertStyle}>{alertMessage}</div>}
             <form onSubmit={handleSubmit} style={styles.form}>
                 <div style={styles.column}>
@@ -119,58 +181,68 @@ const AddHotelForm = ({ hotelToEdit }) => {
                         />
                     </div>
                     <div style={styles.formGroup}>
-                        <label htmlFor="imageUrl">Image URL</label>
+                        <label htmlFor="imageUrl">Upload Images (minimum 5)</label>
                         <input
-                            type="text"
+                            type="file"
                             id="imageUrl"
                             name="imageUrl"
-                            value={hotelData.imageUrl}
-                            onChange={handleChange}
+                            onChange={handleImageChange}
                             style={styles.input}
+                            accept="image/*"
+                            multiple
+                            required
                         />
                     </div>
                 </div>
-                {/* Second column */}
                 <div style={styles.column}>
+                    <div style={styles.formGroup}>
+                        <label>Policies</label>
+                        {Object.keys(hotelData.policies).map((policy) => (
+                            <div key={policy}>
+                                <input
+                                    type="checkbox"
+                                    checked={hotelData.policies[policy]}
+                                    onChange={() => handleCheckboxChange('policies', policy)}
+                                />
+                                <FontAwesomeIcon icon={getPolicyIcon(policy)} style={styles.icon} />
+                                <label style={styles.checkboxLabel}>{policy.charAt(0).toUpperCase() + policy.slice(1)}</label>
+                            </div>
+                        ))}
+                    </div>
+                    <div style={styles.formGroup}>
+                        <label>Facilities</label>
+                        {Object.keys(hotelData.facilities).map((facility) => (
+                            <div key={facility}>
+                                <input
+                                    type="checkbox"
+                                    checked={hotelData.facilities[facility]}
+                                    onChange={() => handleCheckboxChange('facilities', facility)}
+                                />
+                                <FontAwesomeIcon icon={getFacilityIcon(facility)} style={styles.icon} />
+                                <label style={styles.checkboxLabel}>{facility.charAt(0).toUpperCase() + facility.slice(1)}</label>
+                            </div>
+                        ))}
+                    </div>
+                    <div style={styles.formGroup}>
+                        <label>Entertainment</label>
+                        {Object.keys(hotelData.entertainment).map((entertain) => (
+                            <div key={entertain}>
+                                <input
+                                    type="checkbox"
+                                    checked={hotelData.entertainment[entertain]}
+                                    onChange={() => handleCheckboxChange('entertainment', entertain)}
+                                />
+                                <FontAwesomeIcon icon={getEntertainmentIcon(entertain)} style={styles.icon} />
+                                <label style={styles.checkboxLabel}>{entertain.charAt(0).toUpperCase() + entertain.slice(1)}</label>
+                            </div>
+                        ))}
+                    </div>
                     <div style={styles.formGroup}>
                         <label htmlFor="about">About</label>
                         <textarea
                             id="about"
                             name="about"
                             value={hotelData.about}
-                            onChange={handleChange}
-                            style={styles.textarea}
-                            required
-                        />
-                    </div>
-                    <div style={styles.formGroup}>
-                        <label htmlFor="policies">Policies</label>
-                        <textarea
-                            id="policies"
-                            name="policies"
-                            value={hotelData.policies}
-                            onChange={handleChange}
-                            style={styles.textarea}
-                            required
-                        />
-                    </div>
-                    <div style={styles.formGroup}>
-                        <label htmlFor="facilities">Facilities</label>
-                        <textarea
-                            id="facilities"
-                            name="facilities"
-                            value={hotelData.facilities}
-                            onChange={handleChange}
-                            style={styles.textarea}
-                            required
-                        />
-                    </div>
-                    <div style={styles.formGroup}>
-                        <label htmlFor="entertainment">Fun & Entertainment</label>
-                        <textarea
-                            id="entertainment"
-                            name="entertainment"
-                            value={hotelData.entertainment}
                             onChange={handleChange}
                             style={styles.textarea}
                             required
@@ -185,11 +257,59 @@ const AddHotelForm = ({ hotelToEdit }) => {
     );
 };
 
+// Function to get the appropriate icon for policies
+const getPolicyIcon = (policy) => {
+    switch (policy) {
+        case 'wifi':
+            return faWifi;
+        case 'breakfast':
+            return faUtensils;
+        case 'parking':
+            return faCar;
+        case 'petFriendly':
+            return faDog;
+        default:
+            return null;
+    }
+};
+
+// Function to get the appropriate icon for facilities
+const getFacilityIcon = (facility) => {
+    switch (facility) {
+        case 'pool':
+            return faSwimmingPool;
+        case 'gym':
+            return faDumbbell;
+        case 'spa':
+            return faSpa;
+        case 'restaurant':
+            return faUtensils; // Can use the same icon for restaurant
+        default:
+            return null;
+    }
+};
+
+// Function to get the appropriate icon for entertainment
+const getEntertainmentIcon = (entertain) => {
+    switch (entertain) {
+        case 'liveMusic':
+            return faMusic;
+        case 'kidsClub':
+            return faChild;
+        case 'bar':
+            return faTicketAlt;
+        case 'tours':
+            return faTicketAlt; // Can use the same icon for tours
+        default:
+            return null;
+    }
+};
+
 // Inline CSS styles
 const styles = {
     container: {
         maxWidth: '900px',
-        margin: '20px auto', // Added margin for spacing above and below the form
+        margin: '20px auto',
         padding: '20px',
         border: '1px solid #ccc',
         borderRadius: '10px',
@@ -247,6 +367,9 @@ const styles = {
     fullWidth: {
         flex: '0 0 100%',
         marginTop: '20px',
+    },
+    checkboxLabel: {
+        marginLeft: '5px',
     },
 };
 

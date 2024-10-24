@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { deleteHotel, updateHotel } from '../features/hotelSlice';
 import { useState } from 'react';
 import { IoAddCircleOutline, IoClose } from "react-icons/io5";
-import { MdOpacity } from 'react-icons/md';
 import { FiCamera } from 'react-icons/fi'; // New icon for image upload
 
 const AdminPage = () => {
@@ -89,13 +88,11 @@ const AdminPage = () => {
 
   const handleUpdateAdmin = () => {
     setIsEditingAdmin(false);
-    // Logic to update the admin details
     console.log('Admin details updated:', adminDetails);
   };
 
   const handleDeleteAdmin = () => {
     if (window.confirm('Are you sure you want to delete your account? This action is irreversible.')) {
-      // Logic to delete the admin account
       console.log('Admin account deleted');
       navigate('/');
     }
@@ -115,9 +112,9 @@ const AdminPage = () => {
                 alt="Profile of the admin"
                 className="rounded-full border-4 border-white"
                 style={{ borderRadius: "100%", width: '150px', height: '150px', cursor: 'pointer' }}
-                onClick={() => document.getElementById('image-upload').click()} // Trigger file input click
+                onClick={() => document.getElementById('image-upload').click()}
               />
-              <FiCamera style={styles.cameraIcon} /> {/* Camera icon for image upload */}
+              <FiCamera style={styles.cameraIcon} />
               <input
                 type="file"
                 id="image-upload"
@@ -269,7 +266,8 @@ const styles = {
   },
   content: {
     flexGrow: 1,
-    padding: '20px'
+    padding: '20px',
+    transition: 'margin-left 0.3s', // Smooth transition for content margin
   },
   header: {
     display: 'flex',
@@ -282,63 +280,43 @@ const styles = {
     fontWeight: 'bold'
   },
   sidebar: {
-    width: '250px',
     position: 'fixed',
-    left: 0,
     top: 0,
-    bottom: 0,
-    backgroundColor: '#f8f8f8',
-    padding: '20px',
-    overflowY: 'auto'
+    left: 0,
+    width: '250px',
+    height: '100%',
+    backgroundColor: '#fff',
+    borderRight: '1px solid #ccc',
+    zIndex: 1000,
+    transition: 'transform 0.3s ease-in-out',
+    boxShadow: '2px 0 5px rgba(0,0,0,0.1)'
   },
   closeButton: {
     fontSize: '24px',
-    color: '#333',
+    background: 'none',
+    border: 'none',
     cursor: 'pointer',
-    marginBottom: '20px'
-  },
-  logoutButton: {
-    padding: '10px 20px',
-    backgroundColor: '#d9534f',
-    color: '#fff',
-    borderRadius: '4px',
-    cursor: 'pointer'
+    position: 'absolute',
+    top: '10px',
+    right: '10px'
   },
   accommodationCards: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
     gap: '20px'
   },
   accommodationCard: {
-    padding: '15px',
-    backgroundColor: '#fff',
-    borderRadius: '8px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    transition: 'transform 0.4s ease-in-out',
-    '&:hover': {
-      transform: 'scale(1.05)'
-    }
-  },
-  cameraIcon: {
-    position: 'absolute',
-    // bottom: 0,
-    right: 0,
-    fontSize: '24px',
-    color: '#fff',
-    backgroundColor: '#007bff',
-    borderRadius: '50%',
-    padding: '8px',
-    cursor: 'pointer'
-  },
-  imageUpload: {
-    display: 'none'
-  },
-  input: {
-    width: '100%',
-    padding: '8px',
-    marginBottom: '10px',
+    padding: '20px',
     border: '1px solid #ddd',
-    borderRadius: '4px'
+    borderRadius: '8px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+    textAlign: 'center'
+  },
+  accommodationImage: {
+    width: '100%',
+    height: 'auto',
+    borderRadius: '8px',
+    cursor: 'pointer'
   },
   actions: {
     display: 'flex',
@@ -346,33 +324,73 @@ const styles = {
     marginTop: '10px'
   },
   saveButton: {
-    backgroundColor: '#5cb85c',
-    color: '#fff',
-    padding: '10px 20px',
-    borderRadius: '4px',
+    backgroundColor: '#4CAF50',
+    color: 'white',
+    padding: '10px 15px',
+    border: 'none',
+    borderRadius: '5px',
     cursor: 'pointer'
   },
   cancelButton: {
-    backgroundColor: '#f0ad4e',
-    color: '#fff',
-    padding: '10px 20px',
-    borderRadius: '4px',
+    backgroundColor: '#f44336',
+    color: 'white',
+    padding: '10px 15px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer'
+  },
+  editButton: {
+    backgroundColor: '#2196F3',
+    color: 'white',
+    padding: '10px 15px',
+    border: 'none',
+    borderRadius: '5px',
     cursor: 'pointer'
   },
   deleteButton: {
-    backgroundColor: '#d9534f',
-    color: '#fff',
-    padding: '10px 20px',
-    borderRadius: '4px',
+    backgroundColor: '#f44336',
+    color: 'white',
+    padding: '10px 15px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer'
+  },
+  logoutButton: {
+    backgroundColor: '#f44336',
+    color: 'white',
+    padding: '10px 15px',
+    border: 'none',
+    borderRadius: '5px',
     cursor: 'pointer'
   },
   addIcon: {
-    fontSize: '36px',
-    color: '#007bff',
-    cursor: 'pointer',
-    position: 'absolute',
+    position: 'fixed',
     bottom: '20px',
-    right: '20px'
+    right: '20px',
+    fontSize: '40px',
+    color: '#4CAF50',
+    cursor: 'pointer'
+  },
+  input: {
+    width: '100%',
+    padding: '10px',
+    margin: '5px 0',
+    border: '1px solid #ccc',
+    borderRadius: '4px'
+  },
+  imageUpload: {
+    display: 'none'
+  },
+  ProfileContainer: {
+    margin: '20px'
+  },
+  cameraIcon: {
+    position: 'absolute',
+    bottom: '5px',
+    right: '5px',
+    color: 'white',
+    cursor: 'pointer',
+    fontSize: '24px'
   }
 };
 
