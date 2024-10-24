@@ -1,9 +1,3 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-# Firebase---Task-11
+<h1> Firebase---Task-11 </h1>
+<p>Developing a hotel application with comprehensive features and a focus on UI/UX design and functionality, using Firebase for authentication and data storage, and Redux for state management.</p>
