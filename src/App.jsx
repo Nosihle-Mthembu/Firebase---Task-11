@@ -28,7 +28,7 @@ export default function App() {
           <Route path="adminProfile" element={<AdminPage />} />
           <Route path="userProfile" element={<User />} />
           <Route path="/Form" element={<AddHotelForm />} />
-          <Route path="accommodationView" element={<AccommodationView />} />
+          <Route path="/accommodationView/:hotelId" element={<AccommodationView />} />
           <Route path="/update-hotel/:hotelId" element={<UpdateHotelForm />} />
         </Route>
       </Routes>

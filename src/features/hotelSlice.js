@@ -1,32 +1,55 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// Helper functions to manage local storage for hotels and admin profile
+// Local storage helper functions with error handling
 const saveHotelsToLocalStorage = (hotels) => {
-  localStorage.setItem('hotels', JSON.stringify(hotels));
+  try {
+    localStorage.setItem('hotels', JSON.stringify(hotels));
+  } catch (error) {
+    console.error("Could not save hotels to local storage:", error);
+  }
 };
 
 const loadHotelsFromLocalStorage = () => {
-  const storedHotels = localStorage.getItem('hotels');
-  return storedHotels ? JSON.parse(storedHotels) : [];
+  try {
+    const storedHotels = localStorage.getItem('hotels');
+    return storedHotels ? JSON.parse(storedHotels) : [];
+  } catch (error) {
+    console.error("Could not load hotels from local storage:", error);
+    return [];
+  }
 };
 
 const saveAdminToLocalStorage = (admin) => {
-  localStorage.setItem('admin', JSON.stringify(admin));
+  try {
+    localStorage.setItem('admin', JSON.stringify(admin));
+  } catch (error) {
+    console.error("Could not save admin to local storage:", error);
+  }
 };
 
 const loadAdminFromLocalStorage = () => {
-  const storedAdmin = localStorage.getItem('admin');
-  return storedAdmin ? JSON.parse(storedAdmin) : {
-    name: '',
-    email: '',
-    role: 'Administrator',
-    imageUrl: '',
-  };
+  try {
+    const storedAdmin = localStorage.getItem('admin');
+    return storedAdmin ? JSON.parse(storedAdmin) : {
+      name: '',
+      email: '',
+      role: 'Administrator',
+      imageUrl: '',
+    };
+  } catch (error) {
+    console.error("Could not load admin from local storage:", error);
+    return {
+      name: '',
+      email: '',
+      role: 'Administrator',
+      imageUrl: '',
+    };
+  }
 };
 
 const initialState = {
   list: loadHotelsFromLocalStorage(),
-  admin: loadAdminFromLocalStorage(), // Load admin profile from local storage
+  admin: loadAdminFromLocalStorage(),
 };
 
 const hotelSlice = createSlice({
@@ -34,26 +57,30 @@ const hotelSlice = createSlice({
   initialState,
   reducers: {
     addHotel: (state, action) => {
-      state.list.push(action.payload);
-      saveHotelsToLocalStorage(state.list); // Save updated list to local storage
+      const newHotel = {
+        ...action.payload,
+        id: Date.now() // Ensure a unique ID
+      };
+      state.list.push(newHotel);
+      saveHotelsToLocalStorage(state.list);
     },
 
     deleteHotel: (state, action) => {
       state.list = state.list.filter((hotel) => hotel.id !== action.payload);
-      saveHotelsToLocalStorage(state.list); // Save updated list to local storage
+      saveHotelsToLocalStorage(state.list);
     },
 
-    // Updated updateHotel reducer
     updateHotel: (state, action) => {
       const index = state.list.findIndex((hotel) => hotel.id === action.payload.id);
       if (index !== -1) {
         state.list[index] = { ...state.list[index], ...action.payload };
+        saveHotelsToLocalStorage(state.list); // Ensure updated list is saved to local storage
       }
     },
 
     setAdminProfile: (state, action) => {
       state.admin = { ...state.admin, ...action.payload };
-      saveAdminToLocalStorage(state.admin); // Save admin details to local storage
+      saveAdminToLocalStorage(state.admin);
     },
 
     deleteAdminProfile: (state) => {
@@ -62,8 +89,8 @@ const hotelSlice = createSlice({
         email: '',
         role: 'Administrator',
         imageUrl: '',
-      }; // Reset admin profile to initial state
-      saveAdminToLocalStorage(state.admin); // Clear admin details from local storage
+      };
+      saveAdminToLocalStorage(state.admin);
     },
   },
 });
