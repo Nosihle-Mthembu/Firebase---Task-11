@@ -11,20 +11,50 @@ html,body,#root{
 }
 
 .calendar-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .calendar-header {
-  text-align: center;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.calendar-header h2 {
+  font-size: 1.5rem;
+}
+
+.calendar-header p {
+  color: gray;
+}
+
+.calendar-months {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.calendar-month {
+  width: 45%;
+  margin: 0 10px;
+}
+
+.month-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
   margin-bottom: 10px;
 }
 
-.calendar-controls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.arrow-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: black;
 }
 
 .calendar-grid {
@@ -33,33 +63,46 @@ html,body,#root{
   gap: 10px;
 }
 
-.calendar-day {
-  padding: 10px;
-  background-color: #f0f0f0;
-  text-align: center;
-  cursor: pointer;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.week-days {
+  display: contents;
 }
 
-.calendar-day.selected {
+.day-name {
+  text-align: center;
+  font-weight: bold;
+  padding: 5px 0;
+}
+
+.month-days {
+  display: contents;
+}
+
+.calendar-day {
+  text-align: center;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: black;
+}
+
+.calendar-day:hover {
+  background-color: lightgray;
+}
+
+.selected {
   background-color: black;
   color: white;
 }
 
-button {
-  cursor: pointer;
-  background-color: white;
-  border: 1px solid black;
-  padding: 5px 10px;
-}
-
 .clear-dates {
   margin-top: 20px;
+  background-color: white;
+  border: none;
   color: blue;
   cursor: pointer;
 }
