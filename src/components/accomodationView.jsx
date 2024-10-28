@@ -2,11 +2,30 @@ import React from 'react';
 import { useSelector } from 'react-redux';  
 import { useParams } from 'react-router-dom'; 
 import Calendar from './Calendar';
+import { useState } from 'react';
 
   
 function AccommodationView() {  
   const { hotelId } = useParams();  
   const hotel = useSelector((state) => state.hotels.list.find((h) => h.id === parseInt(hotelId)));  
+
+    const [images, setImages] = useState({
+    image1: hotel.imageUrl || "https://placehold.co/400x300",
+    image2: "https://placehold.co/400x300",
+    image3: "https://placehold.co/400x300",
+    image4: "https://placehold.co/400x300",
+    image5: "https://placehold.co/400x300",
+  });
+
+  const handleImageChange = (e, imageKey) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImages(prevImages => ({
+        ...prevImages,
+        [imageKey]: URL.createObjectURL(file),
+      }));
+    }
+  };
 
   const containerStyle = {  
    padding: '1.5rem',  
@@ -68,24 +87,24 @@ function AccommodationView() {
    borderRadius: '0.5rem',  
   };  
   
-  const relativeStyle = {  
-   position: 'relative',  
-  };  
+//   const relativeStyle = {  
+//    position: 'relative',  
+//   };  
   
-  const showButtonStyle = {  
-   position: 'absolute',  
-   bottom: '0.5rem',  
-   right: '0.5rem',  
-   backgroundColor: 'white',  
-   color: 'black',  
-   padding: '0.5rem 1rem',  
-   borderRadius: '0.5rem',  
-   boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',  
-  };  
+//   const showButtonStyle = {  
+//    position: 'absolute',  
+//    bottom: '0.5rem',  
+//    right: '0.5rem',  
+//    backgroundColor: 'white',  
+//    color: 'black',  
+//    padding: '0.5rem 1rem',  
+//    borderRadius: '0.5rem',  
+//    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',  
+//   };  
   
   const map = {  
    border: "0",  
-   width: "150%",  
+   width: "100%",  
    height: "200px",  
   };  
   
@@ -108,7 +127,7 @@ function AccommodationView() {
       <div>  
        <img src={hotel.imageUrl} alt="Spacious living area with pool table and ocean view" style={mainImageStyle} />  
       </div>  
-      <div style={sideImagesStyle}>  
+ {/*      <div style={sideImagesStyle}>  
        <div style={sideImageStyle}>  
         <img src="https://placehold.co/400x300" alt="Swimming pool with ocean view" style={imageStyle} />  
         <img src="https://placehold.co/400x300" alt="Modern house exterior with pool" style={imageStyle} />  
@@ -120,7 +139,22 @@ function AccommodationView() {
           <button style={showButtonStyle}>Show all photos</button>  
         </div>  
        </div>  
-      </div>  
+      </div>   */}
+
+<div style={sideImagesStyle}>  
+          <div style={sideImageStyle}>  
+            <img src={images.image2} alt="Side Image 1" style={imageStyle} onClick={() => document.getElementById('imageInput2').click()} />  
+            <input type="file" id="imageInput2" style={{ display: 'none' }} onChange={(e) => handleImageChange(e, 'image2')} />
+            <img src={images.image3} alt="Side Image 2" style={imageStyle} onClick={() => document.getElementById('imageInput3').click()} />  
+            <input type="file" id="imageInput3" style={{ display: 'none' }} onChange={(e) => handleImageChange(e, 'image3')} />
+          </div>  
+          <div style={sideImageStyle}>  
+            <img src={images.image4} alt="Side Image 3" style={imageStyle} onClick={() => document.getElementById('imageInput4').click()} />  
+            <input type="file" id="imageInput4" style={{ display: 'none' }} onChange={(e) => handleImageChange(e, 'image4')} />
+            <img src={images.image5} alt="Side Image 5" style={imageStyle} onClick={() => document.getElementById('imageInput5').click()} />  
+            <input type="file" id="imageInput5" style={{ display: 'none' }} onChange={(e) => handleImageChange(e, 'image5')} />
+          </div>  
+        </div>  
     </div>  
     <div className="p-6 max-w-2xl mx-auto">  
       <h1 className="text-2xl font-bold">Entire place in {hotel.name}, {hotel.location}</h1>  
@@ -246,7 +280,6 @@ function AccommodationView() {
         <p className="text-sm text-gray-600">1 review</p>  
         <p className="text-sm text-gray-600">October 2021</p>  
         <p className="mt-2">Beautiful, spacious, clean, top kids, this is the perfect house! We got in touch with the host daily and we couldn't have chosen a better house! We loved our stay!...</p>  
-        <button className="text-blue-500">Show more</button>  
        </div>  
       </div>  
     </section>  
@@ -270,4 +303,3 @@ function AccommodationView() {
 }  
   
 export default AccommodationView;
-
